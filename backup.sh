@@ -7,12 +7,13 @@
 ###############################
 # Author:       Matthis B.    #
 # Created:      20201105      #
-# Lastchange:   20201119      #
+# Lastchange:   20250804      #
 ###############################
 # Changelog:                  #
 # - 20201105: init            #
 # - 20201107: small changes   #
 # - 20201119: bug fixes       #
+# - 20250804: use RedisPass   #
 ###############################
 
 ##
@@ -158,14 +159,17 @@ else
 fi
 
 # backup database: redis
+# 20250804: Password required - added
 echo "--- redis-dump"
 redis_id=$(docker ps -qf name=redis-mailcow)
-redis_dump=$(docker exec $redis_id redis-cli save)
-if [[ "$redis_dump" == "OK" ]]; then
+redis_passwd=$(docker exec $redis_id cat /redis.conf | grep requirepass | cut -d" " -f2-
+redis_dump=$(docker exec $redis_id redis-cli --pass $redis_passwd save)
+if [[ "$redis_dump" =~ "OK" ]]; then
   echo "---- success"
 else
-  echo "---- FAILED: $redisdump"
+  echo "---- FAILED: $redis_dump"
 fi
+
 
 
 
