@@ -162,7 +162,7 @@ fi
 # 20250804: Password required - added
 echo "--- redis-dump"
 redis_id=$(docker ps -qf name=redis-mailcow)
-redis_passwd=$(docker exec $redis_id cat /redis.conf | grep requirepass | cut -d" " -f2-
+redis_passwd=$(docker exec $redis_id cat /redis.conf | grep requirepass | cut -d" " -f2-)
 redis_dump=$(docker exec $redis_id redis-cli --pass $redis_passwd save)
 if [[ "$redis_dump" =~ "OK" ]]; then
   echo "---- success"
